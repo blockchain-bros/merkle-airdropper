@@ -18,7 +18,7 @@ import {
 } from "@solana/web3.js";
 import dotenv from "dotenv";
 import { MerkleAirdrop } from "../target/types/merkle_airdrop";
-import airdropData from "./amounts.json";
+import airdropData from "./data.json";
 import { mintToAccount, toBytes32Array } from "./utils";
 import { BalanceTree } from "./utils/balance_tree";
 dotenv.config();

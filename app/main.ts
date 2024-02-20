@@ -30,7 +30,7 @@ import {
 } from "@solana/spl-token";
 import dotenv from "dotenv";
 dotenv.config();
-import airdropData from "./amounts.json";
+import airdropData from "./data.json";
 import { bs58 } from "@coral-xyz/anchor/dist/cjs/utils/bytes";
 
 const CLAIMOR_KEY = process.env.KEY;

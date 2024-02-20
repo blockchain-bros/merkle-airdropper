@@ -1,11 +1,9 @@
 import json
 import base58
 
-# Path to your JSON file
 json_file_path = 'source.json'
-updated_json_file_path = 'amounts.json'
+updated_json_file_path = 'data.json'
 
-# Read the JSON data
 with open(json_file_path, 'r') as file:
     data = json.load(file)
 
@@ -25,7 +23,6 @@ valid_accounts = []
 for item in data:
     try:
         if is_valid_solana_address(item['account']):
-            # Assuming the original amount is in lamports and you want to convert it to SOL (1 SOL = 1 billion lamports)
             sum += item['amount']
             item['amount'] = item['amount']
 
@@ -46,5 +43,5 @@ for item in data:
 with open(updated_json_file_path, 'w') as file:
     json.dump(valid_accounts, file, indent=4)
 
-print(f"Updated accounts and saved to {updated_json_file_path}")
 print(f"Total amount: {sum} tokens")
+print(f"Saved to {updated_json_file_path}")
