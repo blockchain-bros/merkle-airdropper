@@ -4,8 +4,16 @@ import base58
 json_file_path = 'source.json'
 updated_json_file_path = 'data.json'
 
+
 with open(json_file_path, 'r') as file:
     data = json.load(file)
+
+converted_list = [
+    {"account": account, "amount": int(amount)}
+    for account, amount in data.items()
+]
+
+data=converted_list
 
 def is_valid_solana_address(address):
     try:
@@ -22,6 +30,7 @@ valid_accounts = []
 
 for item in data:
     try:
+        print(item)
         if is_valid_solana_address(item['account']):
             sum += item['amount']
             item['amount'] = item['amount']

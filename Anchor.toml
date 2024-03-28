@@ -11,7 +11,8 @@ merkle_airdrop = "c1yG6B2Ch8SWuwKmAToWK8oKiUkPVeVhVLNgAEoSDTs"
 url = "https://api.apr.dev"
 
 [provider]
-cluster = "mainnet"
+cluster = "https://tame-sleek-patina.solana-mainnet.quiknode.pro/1cc6139dba03cdaeb791b047274937ae3acc53a9/"
+#cluster  = "mainnet"
 wallet = "deploy-key.json"
 
 [scripts]

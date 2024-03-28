@@ -55,7 +55,7 @@ async function main() {
     amountsByRecipient.push({
       account: new PublicKey(account),
       // the amount must be multiplied by decimal points
-      amount: new anchor.BN(Number(amount * Math.pow(10, 9))),
+      amount: new anchor.BN(Number(amount * 1)),
     });
   }
   console.log({ totalAmount });
@@ -68,6 +68,10 @@ async function main() {
       merkleAirdropProgram.programId
     );
   console.log("Initialize merkle tree & airdropState");
+  const computeBudgetFee= ComputeBudgetProgram.setComputeUnitPrice({
+    microLamports: 500,
+  });
+
   const initIx = await merkleAirdropProgram.methods
     .init(toBytes32Array(merkleRoot), false)
     .accounts({
@@ -82,14 +86,15 @@ async function main() {
   const tx = new anchor.web3.Transaction({
     recentBlockhash: latestBlockHash.blockhash,
   });
-  tx.add(initIx);
+  tx.add(...[computeBudgetFee, initIx]);
+
   try {
     await provider.sendAndConfirm(tx, []);
     console.log("init success");
   } catch (e) {
     console.log("init failed. Maybe it exists already?");
     console.log(e);
-    process.exit()
+//    process.exit()
   }
   const airdropAmount = new anchor.BN(totalAmount);
   console.log({ airdropAmount });
@@ -118,6 +123,7 @@ async function main() {
     console.log("mint failed. Maybe it exists already?");
     //    console.log(e);
   }
+  
 
   const vault = associatedAddress({ mint: tokenMint, owner: airdropState });
 
@@ -197,9 +203,7 @@ async function main() {
       Buffer.from(proofElem),
     ]);
   }
-  const computeBudgetIx = ComputeBudgetProgram.setComputeUnitLimit({
-    units: 400_000,
-  });
+
   // last transaction: Claim instruction
   const claimIxn = await merkleAirdropProgram.methods
     .claim(
@@ -228,7 +232,7 @@ async function main() {
   const txClaim = new anchor.web3.Transaction({
     recentBlockhash: latestBlockHashClaim.blockhash,
   });
-  txClaim.add(...[computeBudgetIx, claimIxn]);
+  txClaim.add(...[computeBudgetFee, claimIxn]);
   await provider.sendAndConfirm(txClaim, [claimorTestKeypair]);
   console.log(merkleRoot);
   console.log(verificationData);
